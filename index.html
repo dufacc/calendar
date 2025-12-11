@@ -224,7 +224,7 @@ function showPopup(day){
     p.innerHTML = `
         <h2>Dia ${day}</h2>
         <img src="${imgUrl}" style="width:100%;border-radius:10px;margin-bottom:15px;" />
-        <audio  src="files\audio\cards\${audio}.mp3"></audio>
+        <audio  src="files\audio\cards\" + ${audio} + ".mp3"></audio>
         
         <p>${mensagem}</p>
         <button onclick="closePopup()">Fechar</button>
@@ -263,7 +263,5 @@ generateCalendar();
 
 </body>
 </html>
-
-
 
 
