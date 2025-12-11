@@ -237,7 +237,7 @@ function showPopup(day){
 
     const imgUrl = imagens[day] || `https://picsum.photos/500?random=${day}`;
     const mensagem = mensagens[day] || "Mensagem especial!";
-    const audioName = audios[day] || null;
+    const audioName = day || null;
 
     p.innerHTML = `
         <h2>Dia ${day}</h2>
@@ -291,3 +291,4 @@ generateCalendar();
 
 </body>
 </html>
+
