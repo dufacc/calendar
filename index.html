@@ -195,16 +195,19 @@ function createBox(day, format){
         front.innerHTML = `DIA ${day} ${emoji}`;
 
     } else if (day === today) {
-        front.classList.add("today-front");
-        front.innerHTML = `🕯️ DIA ${day} 🎅 <br><small style="font-size:14px; display:block; margin-top:4px;">É hoje! 🎁 Abra sua janelinha!</small>`;
-    } else if (day === 24) {
+
+        if (day === 24) {
         front.classList.add("today-front");
         front.innerHTML = `🕯️ DIA 24 🎅 <br>
                             <small style="font-size:14px; display:block; margin-top:4px;">
                             ❄️🎄 A magia está no ar! ✨ Que esta véspera de Natal encha seu mundo de paz, alegria e sonhos brilhando! 🌟🎁
                             </small>
                             `;
+        } else {
+            front.classList.add("today-front");
+            front.innerHTML = `🕯️ DIA ${day} 🎅 <br><small style="font-size:14px; display:block; margin-top:4px;">É hoje! 🎁 Abra sua janelinha!</small>`;
         }
+    }
     else {
         front.classList.add("locked-front");
         front.style.background = baseColor;
@@ -298,6 +301,7 @@ generateCalendar();
 
 </body>
 </html>
+
 
 
 
