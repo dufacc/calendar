@@ -109,9 +109,6 @@ h1 {
 <!-- 🔊 SOM DO POPUP -->
 <audio id="popupAudio"></audio>
 
-<!-- 🔊 ÁUDIO DE FUNDO (loop) -->
-<audio id="bgMusic" src="files/audio/bgmusic.mp3" autoplay loop></audio>
-
 <script>
 const grid = document.getElementById("grid");
 const now = new Date();
@@ -119,6 +116,15 @@ const today = now.getDate();
 const TOTAL = 24;
 
 const AUTO_OPEN_PAST_DAYS = false;
+
+let bgMusicStarted = false;
+
+document.addEventListener('click', () => {
+    if(!bgMusicStarted){
+        bgMusic.play().catch(() => {});
+        bgMusicStarted = true;
+    }
+}, { once: true }); // dispara só uma vez
 
 // 🔊 CONTROLES DE ÁUDIO
 const bgMusic = document.getElementById("bgMusic");
@@ -339,6 +345,7 @@ generateCalendar();
 
 </body>
 </html>
+
 
 
 
