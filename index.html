@@ -2,9 +2,11 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8" />
+
 <link rel="icon" type="image/png" sizes="32x32" href="files/icon/favicon1.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Calendário de Advento</title>
+
 <style>
 body {
     margin: 0;
@@ -63,15 +65,17 @@ h1 {
     color: #fff !important;
     border-color: #fff !important;
 }
-.open-front {
+.open-front { 
     color: #222 !important;
 }
-.locked-front {
+.locked-front { 
     color: #fff;
 }
+
 .wide { grid-column: span 2; }
 .tall { grid-row: span 2; }
-.big { grid-column: span 2; grid-row: span 2; }
+.big  { grid-column: span 2; grid-row: span 2; }
+
 #popupBg {
     position: fixed;
     inset: 0;
@@ -92,90 +96,61 @@ h1 {
 </style>
 </head>
 <body>
+
 <h1>🎄 Calendário de Advento</h1>
+
 <div class="grid" id="grid"></div>
+
 <div id="popupBg"><div id="popup"></div></div>
+
 <!-- 🔊 SOM DO FLIP -->
 <audio id="flipSound" src="files/audio/flipcard.mp3"></audio>
+
 <!-- 🔊 SOM DO POPUP -->
 <audio id="popupAudio"></audio>
-<!-- 🔊 ÁUDIO DE FUNDO (loop sem gap) -->
-<audio id="bgMusic1" src="files/audio/bgmusic.mp3" preload="auto"></audio>
-<audio id="bgMusic2" src="files/audio/bgmusic.mp3" preload="auto"></audio>
-<button onclick="playMusic()">Play Music</button>
+
+<!-- 🔊 ÁUDIO DE FUNDO (loop) -->
+<audio id="bgMusic" src="files/audio/bgmusic.mp3" autoplay loop muted></audio>
+
+<button onclick="playMusic()">Play Music</button>    
+
 <script>
 const grid = document.getElementById("grid");
 const now = new Date();
 const today = now.getDate();
 const TOTAL = 24;
+
 const AUTO_OPEN_PAST_DAYS = false;
 
-// Elementos de áudio
-const bgMusic1 = document.getElementById("bgMusic1");
-const bgMusic2 = document.getElementById("bgMusic2");
-const flipSound = document.getElementById("flipSound");
-const popupAudio = document.getElementById("popupAudio");
-
-let lowerVolumeOnEffects = true;
-let originalVolume = 1.0;
-let musicEnabled = false; // Começa muted
-let firstInteraction = true;
-
-// Inicia o loop seamless (sem gap)
-bgMusic1.volume = 0;
-bgMusic2.volume = 0;
-bgMusic1.play();
-bgMusic2.play(); // Ambos começam juntos, mas alternam
-
-bgMusic1.addEventListener('timeupdate', () => {
-    if (bgMusic1.currentTime > bgMusic1.duration - 0.2) { // 0.2s antes do fim
-        bgMusic2.currentTime = 0;
-        bgMusic2.play();
-    }
-});
-bgMusic2.addEventListener('timeupdate', () => {
-    if (bgMusic2.currentTime > bgMusic2.duration - 0.2) {
-        bgMusic1.currentTime = 0;
-        bgMusic1.play();
-    }
-});
-
-// Função para ativar som na primeira interação
-function enableMusic() {
-    if (musicEnabled) return;
-    musicEnabled = true;
-    bgMusic1.volume = originalVolume;
-    bgMusic2.volume = originalVolume;
-}
-
-// Corrige o botão Play Music
 function playMusic() {
-    enableMusic();
+    var audio = document.getElementById("Music");
+    audio.play();
 }
 
-// CONTROLES DE ÁUDIO
+// 🔊 CONTROLES DE ÁUDIO
+const bgMusic = document.getElementById("bgMusic");
+let lowerVolumeOnEffects = true; // 🔧 controle — coloque false para apenas pausar ao invés de baixar o volume
+let originalVolume = 1.0;
+bgMusic.volume = originalVolume;
+
 function reduceBgVolume() {
     if (lowerVolumeOnEffects) {
-        bgMusic1.volume = 0.25;
-        bgMusic2.volume = 0.25;
+        bgMusic.volume = 0.25; // 🎵 deixa baixinho enquanto toca outro áudio
     } else {
-        bgMusic1.pause();
-        bgMusic2.pause();
-    }
-}
-function restoreBgVolume() {
-    if (musicEnabled) {
-        if (lowerVolumeOnEffects) {
-            bgMusic1.volume = originalVolume;
-            bgMusic2.volume = originalVolume;
-        } else {
-            bgMusic1.play().catch(() => {});
-            bgMusic2.play().catch(() => {});
-        }
+        bgMusic.pause(); // 🔇 se preferir pausar totalmente
     }
 }
 
-// 🎁 MENSAGENS PERSONALIZADAS (sem mudanças)
+function restoreBgVolume() {
+    if (lowerVolumeOnEffects) {
+        bgMusic.volume = originalVolume;
+    } else {
+        bgMusic.play().catch(() => {});
+    }
+}
+
+
+// 🎁 MENSAGENS PERSONALIZADAS
 const mensagens = {
     1: "Primeiro dia! 🎉",
     2: "Surpresa do dia 2!",
@@ -184,54 +159,76 @@ const mensagens = {
     20: "Dia 20, reta final! ⭐",
     24: "Chegou a véspera! 🎅✨"
 };
-// 📸 IMAGENS PERSONALIZADAS (sem mudanças)
+
+// 📸 IMAGENS PERSONALIZADAS
 const imagens = {
     1: "https://picsum.photos/id/237/500/500",
     5: "https://picsum.photos/id/1025/500/500",
     10: "https://picsum.photos/id/1062/500/500"
 };
-// 🔊 ÁUDIOS PERSONALIZADOS (sem mudanças)
+
+// 🔊 ÁUDIOS PERSONALIZADOS
 const audios = {
     1: "dia1",
     5: "dia5",
     10: "dia10",
     24: "dia24"
 };
-// ⭐ PALETA DE VERDES (sem mudanças)
+
+// ⭐ PALETA DE VERDES
 const greenPalette = ["#1B5E20","#2E7D32","#388E3C","#43A047","#66BB6A","#A5D6A7"];
-// ⭐ FORMATOS (sem mudanças)
+
+// ⭐ FORMATOS
 const formats = [
     { name: "square", w: 1, h: 1 },
-    { name: "wide", w: 2, h: 1 },
-    { name: "tall", w: 1, h: 2 },
-    { name: "big", w: 2, h: 2 },
+    { name: "wide",   w: 2, h: 1 },
+    { name: "tall",   w: 1, h: 2 },
+    { name: "big",    w: 2, h: 2 },
 ];
-// ⭐ EMOJIS ALEATÓRIOS (sem mudanças)
+
+// ⭐ EMOJIS ALEATÓRIOS
 const emojis = ["✨","🎁","🎄","⭐","❄️","⛄","🕯️","🍪","🌟","🦌","🔔","❤️"];
+
+// ------------------------
+// FUNÇÕES
+// ------------------------
 
 function createColorForDay(day){
     return greenPalette[(day-1) % greenPalette.length];
 }
+
 function createBox(day, format){
     const wrapper = document.createElement("div");
     wrapper.classList.add("day-box");
+
     if (format.name !== "square")
         wrapper.classList.add(format.name);
+
     const front = document.createElement("div");
     front.classList.add("day-inner");
+
     const back = document.createElement("div");
     back.classList.add("day-inner","day-back");
+
     const imgBack = imagens[day] || `https://picsum.photos/300?random=${day}`;
     back.style.backgroundImage = `url('${imgBack}')`;
+
     const baseColor = createColorForDay(day);
     const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+
+    // ------------------------
+    // LÓGICA DOS DIAS AJUSTADA
+    // ------------------------
+
     if (day < today && AUTO_OPEN_PAST_DAYS) {
         wrapper.classList.add("flipped");
         front.classList.add("open-front");
         front.style.background = baseColor;
         front.style.color = "#fff";
         front.innerHTML = `DIA ${day} ${emoji}`;
+
     } else if (day === today) {
+
         if (day === 24) {
         front.classList.add("today-front");
         front.innerHTML = `🕯️ DIA 24 🎅 <br>
@@ -250,48 +247,63 @@ function createBox(day, format){
         front.style.color = "#fff";
         front.innerHTML = `DIA ${day} ${emoji}`;
     }
+
     wrapper.appendChild(front);
     wrapper.appendChild(back);
+
+    // 🔊 SOM DO FLIP
+    const flipSound = document.getElementById("flipSound");
+
     wrapper.addEventListener("click", () => {
-        // Ativa som na primeira interação
-        if (firstInteraction) {
-            firstInteraction = false;
-            enableMusic();
-        }
         if(day > today){
             showPopupMsg(`Ainda não é dia ${day} para abrir esta surpresa!`);
             return;
         }
+
         if(!wrapper.classList.contains("flipped")){
             wrapper.classList.add("flipped");
+
             reduceBgVolume();
+
             flipSound.currentTime = 0;
             flipSound.play().finally(() => {
                 setTimeout(() => restoreBgVolume(), 400);
             });
+
+
         } else {
             showPopup(day);
         }
     });
+
     return wrapper;
 }
+
 function showPopup(day){
     const bg = document.getElementById("popupBg");
     const p = document.getElementById("popup");
+
     const imgUrl = imagens[day] || `https://picsum.photos/500?random=${day}`;
     const mensagem = mensagens[day] || "Mensagem especial!";
-    const audioName = audios[day]; // Corrigi aqui: usa o nome correto do áudio
+    const audioName = day || null;
+
     p.innerHTML = `
         <h2>Dia ${day}</h2>
         <img src="${imgUrl}" style="width:100%;border-radius:10px;margin-bottom:15px;" />
         <p>${mensagem}</p>
         <button onclick="closePopup()">Fechar</button>
     `;
+
     bg.style.display = "flex";
+
+    const popupAudio = document.getElementById("popupAudio");
+
     if (audioName) {
         popupAudio.src = `files/audio/cards/${audioName}.mp3`;
         popupAudio.load();
+        
         reduceBgVolume();
+        
         popupAudio.play()
             .then(() => {
                 popupAudio.onended = () => restoreBgVolume();
@@ -299,23 +311,28 @@ function showPopup(day){
             .catch(() => restoreBgVolume());
     }
 }
+
 function showPopupMsg(msg){
     const bg = document.getElementById("popupBg");
     const p = document.getElementById("popup");
+
     p.innerHTML = `
         <h2>Aguarde!</h2>
         <p>${msg}</p>
         <button onclick="closePopup()">Fechar</button>
     `;
+
     bg.style.display = "flex";
 }
+
 function closePopup(){
     const audio = document.getElementById("popupAudio");
     audio.pause();
     audio.currentTime = 0;
-    restoreBgVolume();
+
     document.getElementById("popupBg").style.display = "none";
 }
+
 function generateCalendar(){
     for(let day=1; day<=TOTAL; day++){
         let format = formats[Math.floor(Math.random()*formats.length)];
@@ -323,7 +340,9 @@ function generateCalendar(){
         grid.appendChild(el);
     }
 }
+
 generateCalendar();
 </script>
+
 </body>
 </html>
