@@ -109,6 +109,9 @@ h1 {
 <!-- 🔊 SOM DO POPUP -->
 <audio id="popupAudio"></audio>
 
+<!-- 🔊 ÁUDIO DE FUNDO (loop) -->
+<audio id="bgMusic" src="files/audio/bgmusic.mp3" autoplay loop></audio>
+
 <script>
 const grid = document.getElementById("grid");
 const now = new Date();
@@ -116,6 +119,29 @@ const today = now.getDate();
 const TOTAL = 24;
 
 const AUTO_OPEN_PAST_DAYS = false;
+
+// 🔊 CONTROLES DE ÁUDIO
+const bgMusic = document.getElementById("bgMusic");
+let lowerVolumeOnEffects = true; // 🔧 controle — coloque false para apenas pausar ao invés de baixar o volume
+let originalVolume = 1.0;
+bgMusic.volume = originalVolume;
+
+function reduceBgVolume() {
+    if (lowerVolumeOnEffects) {
+        bgMusic.volume = 0.25; // 🎵 deixa baixinho enquanto toca outro áudio
+    } else {
+        bgMusic.pause(); // 🔇 se preferir pausar totalmente
+    }
+}
+
+function restoreBgVolume() {
+    if (lowerVolumeOnEffects) {
+        bgMusic.volume = originalVolume;
+    } else {
+        bgMusic.play().catch(() => {});
+    }
+}
+
 
 // 🎁 MENSAGENS PERSONALIZADAS
 const mensagens = {
@@ -230,8 +256,13 @@ function createBox(day, format){
         if(!wrapper.classList.contains("flipped")){
             wrapper.classList.add("flipped");
 
+            reduceBgVolume();
+
             flipSound.currentTime = 0;
-            flipSound.play();
+            flipSound.play().finally(() => {
+                setTimeout(() => restoreBgVolume(), 400);
+            });
+
 
         } else {
             showPopup(day);
@@ -263,7 +294,14 @@ function showPopup(day){
     if (audioName) {
         popupAudio.src = `files/audio/cards/${audioName}.mp3`;
         popupAudio.load();
-        popupAudio.play().catch(() => {});
+        
+        reduceBgVolume();
+        
+        popupAudio.play()
+            .then(() => {
+                popupAudio.onended = () => restoreBgVolume();
+            })
+            .catch(() => restoreBgVolume());
     }
 }
 
@@ -301,6 +339,7 @@ generateCalendar();
 
 </body>
 </html>
+
 
 
 
