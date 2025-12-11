@@ -130,12 +130,12 @@ function playMusic() {
 // 🔊 CONTROLES DE ÁUDIO
 const bgMusic = document.getElementById("bgMusic");
 let lowerVolumeOnEffects = true; // 🔧 controle — coloque false para apenas pausar ao invés de baixar o volume
-let originalVolume = 1.0;
+let originalVolume = 0.5;
 bgMusic.volume = originalVolume;
 
 function reduceBgVolume() {
     if (lowerVolumeOnEffects) {
-        bgMusic.volume = 0.25; // 🎵 deixa baixinho enquanto toca outro áudio
+        bgMusic.volume = 0.20; // 🎵 deixa baixinho enquanto toca outro áudio
     } else {
         bgMusic.pause(); // 🔇 se preferir pausar totalmente
     }
@@ -346,4 +346,5 @@ generateCalendar();
 
 </body>
 </html>
+
 
