@@ -196,9 +196,9 @@ function createBox(day, format){
 
     } else if (day === today) {
         front.classList.add("today-front");
-        front.innerHTML = `DIA ${day} 🎅`;
-
-    } else {
+        front.innerHTML = `DIA ${day} 🎅 <br><small style="font-size:14px; display:block; margin-top:4px;">É hoje! Abra sua janelinha!</small>`;
+        }
+    else {
         front.classList.add("locked-front");
         front.style.background = baseColor;
         front.style.color = "#fff";
@@ -291,4 +291,5 @@ generateCalendar();
 
 </body>
 </html>
+
 
