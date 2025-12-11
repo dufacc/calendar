@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 
-<link rel="icon" type="image/png" sizes="32x32" href="favicon1.png">
+<link rel="icon" type="image/png" sizes="32x32" href="files/icon/favicon1.png">
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <title>Calendário de Advento</title>
 
@@ -104,7 +104,7 @@ h1 {
 <div id="popupBg"><div id="popup"></div></div>
 
 <!-- 🔊 ÁUDIO DO EFEITO -->
-<audio id="flipSound" src="C:\Users\dufac\Desktop\Advent Calendar\files\audio\flipcard.mp3"></audio>
+<audio id="flipSound" src="files\audio\flipcard.mp3"></audio>
 
 <script>
 const grid = document.getElementById("grid");
@@ -219,10 +219,13 @@ function showPopup(day){
     // 👉 Foto personalizada ou random 500px
     const imgUrl = imagens[day] || `https://picsum.photos/500?random=${day}`;
     const mensagem = mensagens[day] || "Mensagem especial!";
+    const audio = day || "Mensagem especial!";
 
     p.innerHTML = `
         <h2>Dia ${day}</h2>
         <img src="${imgUrl}" style="width:100%;border-radius:10px;margin-bottom:15px;" />
+        <audio  src="files\audio\cards\${audio}.mp3"></audio>
+        
         <p>${mensagem}</p>
         <button onclick="closePopup()">Fechar</button>
     `;
@@ -260,6 +263,7 @@ generateCalendar();
 
 </body>
 </html>
+
 
 
 
