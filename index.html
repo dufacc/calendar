@@ -103,8 +103,11 @@ h1 {
 
 <div id="popupBg"><div id="popup"></div></div>
 
-<!-- 🔊 ÁUDIO DO EFEITO -->
-<audio id="flipSound" src="files\audio\flipcard.mp3"></audio>
+<!-- 🔊 SOM DO FLIP -->
+<audio id="flipSound" src="files/audio/flipcard.mp3"></audio>
+
+<!-- 🔊 SOM DO POPUP -->
+<audio id="popupAudio"></audio>
 
 <script>
 const grid = document.getElementById("grid");
@@ -112,7 +115,7 @@ const now = new Date();
 const today = now.getDate();
 const TOTAL = 24;
 
-const AUTO_OPEN_PAST_DAYS = false; // ⭐ ATIVE/DESATIVE AQUI ⭐
+const AUTO_OPEN_PAST_DAYS = false;
 
 // 🎁 MENSAGENS PERSONALIZADAS
 const mensagens = {
@@ -124,21 +127,38 @@ const mensagens = {
     24: "Chegou a véspera! 🎅✨"
 };
 
-// 🖼️ **IMAGENS PERSONALIZADAS**
-// Basta adicionar:  NÚMERO_DO_DIA: "URL_DA_IMAGEM"
+// 📸 IMAGENS PERSONALIZADAS
 const imagens = {
     1: "https://picsum.photos/id/237/500/500",
     5: "https://picsum.photos/id/1025/500/500",
     10: "https://picsum.photos/id/1062/500/500"
 };
 
+// 🔊 ÁUDIOS PERSONALIZADOS
+const audios = {
+    1: "dia1",
+    5: "dia5",
+    10: "dia10",
+    24: "dia24"
+};
+
+// ⭐ PALETA DE VERDES
 const greenPalette = ["#1B5E20","#2E7D32","#388E3C","#43A047","#66BB6A","#A5D6A7"];
+
+// ⭐ FORMATOS
 const formats = [
     { name: "square", w: 1, h: 1 },
     { name: "wide",   w: 2, h: 1 },
     { name: "tall",   w: 1, h: 2 },
     { name: "big",    w: 2, h: 2 },
 ];
+
+// ⭐ EMOJIS ALEATÓRIOS
+const emojis = ["✨","🎁","🎄","⭐","❄️","⛄","🕯️","🍪","🌟","🎅","🤶","🦌","🔔","❤️"];
+
+// ------------------------
+// FUNÇÕES
+// ------------------------
 
 function createColorForDay(day){
     return greenPalette[(day-1) % greenPalette.length];
@@ -157,14 +177,14 @@ function createBox(day, format){
     const back = document.createElement("div");
     back.classList.add("day-inner","day-back");
 
-    // 👉 IMAGEM personalizada OU aleatória
     const imgBack = imagens[day] || `https://picsum.photos/300?random=${day}`;
     back.style.backgroundImage = `url('${imgBack}')`;
 
     const baseColor = createColorForDay(day);
+    const emoji = emojis[Math.floor(Math.random() * emojis.length)];
 
     // ------------------------
-    // LÓGICA DOS DIAS
+    // LÓGICA DOS DIAS AJUSTADA
     // ------------------------
 
     if (day < today && AUTO_OPEN_PAST_DAYS) {
@@ -172,23 +192,23 @@ function createBox(day, format){
         front.classList.add("open-front");
         front.style.background = baseColor;
         front.style.color = "#fff";
-        front.textContent = "Dia " + day;
+        front.innerHTML = `DIA ${day} ${emoji}`;
 
-    } else if(day === today){
+    } else if (day === today) {
         front.classList.add("today-front");
-        front.textContent = "Hoje! abra sua surpresa";
+        front.innerHTML = `DIA ${day} 🎅`;
 
     } else {
         front.classList.add("locked-front");
         front.style.background = baseColor;
         front.style.color = "#fff";
-        front.textContent = day;
+        front.innerHTML = `DIA ${day} ${emoji}`;
     }
 
     wrapper.appendChild(front);
     wrapper.appendChild(back);
 
-    // 🔊 SOM
+    // 🔊 SOM DO FLIP
     const flipSound = document.getElementById("flipSound");
 
     wrapper.addEventListener("click", () => {
@@ -200,7 +220,6 @@ function createBox(day, format){
         if(!wrapper.classList.contains("flipped")){
             wrapper.classList.add("flipped");
 
-            // 🔊 TOCAR SOM
             flipSound.currentTime = 0;
             flipSound.play();
 
@@ -216,21 +235,26 @@ function showPopup(day){
     const bg = document.getElementById("popupBg");
     const p = document.getElementById("popup");
 
-    // 👉 Foto personalizada ou random 500px
     const imgUrl = imagens[day] || `https://picsum.photos/500?random=${day}`;
     const mensagem = mensagens[day] || "Mensagem especial!";
-    const audio = day || "Mensagem especial!";
+    const audioName = audios[day] || null;
 
     p.innerHTML = `
         <h2>Dia ${day}</h2>
         <img src="${imgUrl}" style="width:100%;border-radius:10px;margin-bottom:15px;" />
-        <audio  src="files\audio\cards\" + ${audio} + ".mp3"></audio>
-        
         <p>${mensagem}</p>
         <button onclick="closePopup()">Fechar</button>
     `;
 
     bg.style.display = "flex";
+
+    const popupAudio = document.getElementById("popupAudio");
+
+    if (audioName) {
+        popupAudio.src = `files/audio/cards/${audioName}.mp3`;
+        popupAudio.load();
+        popupAudio.play().catch(() => {});
+    }
 }
 
 function showPopupMsg(msg){
@@ -247,6 +271,10 @@ function showPopupMsg(msg){
 }
 
 function closePopup(){
+    const audio = document.getElementById("popupAudio");
+    audio.pause();
+    audio.currentTime = 0;
+
     document.getElementById("popupBg").style.display = "none";
 }
 
@@ -263,5 +291,3 @@ generateCalendar();
 
 </body>
 </html>
-
-
