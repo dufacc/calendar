@@ -210,8 +210,10 @@ function createBox(day, format){
 
     const back = document.createElement("div");
     back.classList.add("day-inner","day-back");
-
+    
     const imgBack = `files/audio/cards/${day}.jpeg`;
+    back.style.backgroundImage = `url('${imgBack}')`;
+    
 
     const baseColor = createColorForDay(day);
     const emoji = emojis[Math.floor(Math.random() * emojis.length)];
@@ -346,4 +348,5 @@ generateCalendar();
 
 </body>
 </html>
+
 
