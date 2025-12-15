@@ -123,8 +123,9 @@ const TOTAL = 24;
 const AUTO_OPEN_PAST_DAYS = false;
 
 function playMusic() {
-    var audio = document.getElementById("Music");
-    audio.play();
+    const audio = document.getElementById("bgMusic");
+    audio.muted = false;   // 🔊 desbloqueia o som
+    audio.play().catch(() => {});
 }
 
 // 🔊 CONTROLES DE ÁUDIO
@@ -210,8 +211,7 @@ function createBox(day, format){
     const back = document.createElement("div");
     back.classList.add("day-inner","day-back");
 
-    const imgBack = imagens[day] || `https://picsum.photos/300?random=${day}`;
-    back.style.backgroundImage = `url('${imgBack}')`;
+    const imgBack = `files/audio/cards/${day}.jpeg`;
 
     const baseColor = createColorForDay(day);
     const emoji = emojis[Math.floor(Math.random() * emojis.length)];
@@ -283,7 +283,7 @@ function showPopup(day){
     const bg = document.getElementById("popupBg");
     const p = document.getElementById("popup");
 
-    const imgUrl = imagens[day] || `https://picsum.photos/500?random=${day}`;
+    const imgUrl = `files/audio/cards/${day}.jpeg`;
     const mensagem = mensagens[day] || "Mensagem especial!";
     const audioName = day || null;
 
@@ -346,3 +346,4 @@ generateCalendar();
 
 </body>
 </html>
+
